@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Measure and Cities</title>
+</head>
+<body>
+    <h1>Select Measure and Cities</h1>
+    <form action="/select_cities" method="POST">
+        <h2>Select Measure</h2>
+        <label>
+            <input type="radio" name="measure" value="distance" required>
+            Optimize by Distance
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="measure" value="time" required>
+            Optimize by Time
+        </label>
+        
+        <h2>Select Cities</h2>
+        {% for city in cities %}
+        <label>
+            <input type="checkbox" name="cities" value="{{ city }}">
+            {{ city }}
+        </label>
+        <br>
+        {% endfor %}
+        
+        <h2>Select Start City</h2>
+        <select name="start_city" required>
+            {% for city in cities %}
+            <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Calculate Route</button>
+    </form>
+</body>
+</html>
