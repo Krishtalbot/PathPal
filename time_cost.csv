@@ -1,0 +1,11 @@
+Destination,Kathmandu,Pokhara,Chitwan National Park,Lumbini,Patan,Annupurna Circuit (Manang),Nagarkot,Bardia National Park,Janakpur,Dhulikhel
+Kathmandu,0,422,318,565,22,651,67,912,360,66
+Pokhara,422,0,259,356,418,521,458,651,541,463
+Chitwan National Park,318,259,0,320,309,510,360,660,314,360
+Lumbini,565,356,320,0,597,765,643,366,582,649
+Patan,22,418,309,597,0,648,45,901,335,52
+Annupurna Circuit (Manang),651,521,510,765,648,0,707,1106,789,714
+Nagarkot,67,458,360,643,45,707,0,946,343,59
+Bardia National Park,912,651,660,366,901,1106,946,0,861,995
+Janakpur,360,541,314,582,335,789,343,861,0,301
+Dhulikhel,66,463,360,649,52,714,59,995,301,0

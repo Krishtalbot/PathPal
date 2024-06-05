@@ -1,21 +1,77 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 from greedy import nearest_neighbor_algorithm
+import csv
+import math
 
-cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
+def read_csv(file_path):
+    with open(file_path, mode='r') as infile:
+        reader = csv.reader(infile)
+        data = list(reader)
+        
+    headers = data[0]
+    distance_matrix = {row[0]: {headers[i]: int(row[i]) for i in range(1, len(headers))} for row in data[1:]}
+    return headers[1:], distance_matrix
+
+
+def get_user_destinations(all_destinations):
+    destination_dict = {i+1: dest for i, dest in enumerate(all_destinations)}
+    print("\nAvailable destinations: ")
+    for num, dest in destination_dict.items():
+        print(f"{num}: {dest}")
+    
+    selected_numbers = input("\nEnter the numbers corresponding to the destinations you want to visit, separated by space (First place selected is the starting place): ").split()
+    selected_numbers = [int(num.strip()) for num in selected_numbers]
+    
+    selected_destinations = [destination_dict[num] for num in selected_numbers if num in destination_dict]
+    return selected_destinations
+
+
+def generate_distance_matrix(selected_destinations, distance_data):
+    n = len(selected_destinations)
+    distance_matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            distance_matrix[i][j] = distance_data[selected_destinations[i]][selected_destinations[j]]
+    return distance_matrix
+
+def measure_input():
+    measure = int(input("\nOptimize based on:\n1.Distance\n2.Time\n"))
+    if measure == 1:
+        all_destinations, distance_data = read_csv('distance_cost.csv')
+    elif measure == 2:
+        all_destinations, distance_data = read_csv('time_cost.csv')
+    else:
+        print("Please select appropriate input.")
+        measure_input()
+    return all_destinations, distance_data, measure
+
+cities_data, distance_data, measure = measure_input()
+cities = get_user_destinations(cities_data)
+distance_matrix = generate_distance_matrix(cities, distance_data)
+    
+print("\n\nCities: ", cities)
+print("\nDistance Matrix: ")
+for row in distance_matrix:
+    print(row)
+
+'''cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
 distance_matrix = [
     [0, 2795, 790, 1627, 2445],
     [2795, 0, 2015, 1547, 372],
     [790, 2015, 0, 1084, 1745],
     [1627, 1547, 1084, 0, 1174],
     [2445, 372, 1745, 1174, 0]
-]
+]'''
 
 start_city_index = 0
-city_path, total_distance = nearest_neighbor_algorithm(distance_matrix, cities, start_city_index)
+city_path, total_cost = nearest_neighbor_algorithm(distance_matrix, cities, start_city_index)
 
-print("Travel Path:", city_path)
-print("Total Distance:", total_distance, "miles")
+print("\n\nTravel Path:", city_path)
+if measure == 1:
+    print("Total Distance:", total_cost, "kilometers")
+elif measure == 2:
+    print("Total Time:", math.floor(total_cost/60), "hours", (total_cost%60))
 
 def create_graph_with_all_edges(cities, distance_matrix):
     G = nx.Graph()
