@@ -11,6 +11,7 @@ body{
     background-image: url(../img/2cf8b2390d371494b33b76c79ca1e6e7.png);
     background-repeat:no-repeat;
     background-size:cover;
+    padding: 30px;
 }
 .header{
     display: flex;
@@ -18,7 +19,6 @@ body{
     justify-content: center;
     align-items: center;
     color: #f1ebe4;
-    margin: 16px;
 }
 .header strong{
     font-size: 32px;
