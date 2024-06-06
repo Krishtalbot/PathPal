@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_bootstrap import Bootstrap
 import csv
 import math
 import networkx as nx
@@ -8,6 +9,8 @@ import base64
 from greedy import nearest_neighbor_algorithm
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
+bootstrap = Bootstrap(app)
 
 def read_csv(file_path):
     with open(file_path, mode='r') as infile:
@@ -34,11 +37,13 @@ def index():
 def select_cities():
     selected_cities = request.form.getlist('cities')
     if len(selected_cities) < 2:
-        return "Please select at least two cities to calculate a route."
+        flash("Please select at least two cities to calculate a route.", "error")
+        return redirect(url_for('index'))
 
     start_city = request.form['start_city']
     if start_city not in selected_cities:
-        return "The start city must be one of the selected cities."
+        flash("The start city must be one of the selected cities.", "error")
+        return redirect(url_for('index'))
 
     measure = request.form['measure']
     
@@ -83,18 +88,26 @@ def create_graph_with_path(city_path, cities, distance_matrix):
     return G
 
 def draw_graph(G, title, start_city):
-    pos = nx.spring_layout(G)
+    pos = nx.spring_layout(G, scale=2)  # Adjust the scale parameter to control the spread of nodes
     node_colors = ['#00A08F' if node == start_city else '#FF9F52' for node in G.nodes]
-    plt.figure()
-    nx.draw(G, pos, with_labels=True, node_color=node_colors, node_size=3000, font_size=10, font_weight="bold")
+    plt.figure(figsize=(8, 6))  # Adjust the figure size as needed
+    nx.draw(G, pos, with_labels=True, node_color=node_colors, node_size=2000, font_size=8, font_weight="bold")
+    
+    # Draw edges
+    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
+    
+    # Draw edge labels
     edge_labels = {(u, v): d['weight'] for u, v, d in G.edges(data=True)}
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8, font_weight="bold")
+    
     plt.title(title)
+    plt.tight_layout()  # Adjust the layout of the plot to prevent overlap
     buf = BytesIO()
     plt.savefig(buf, format="png")
     plt.close()
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     return f"data:image/png;base64,{data}"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
