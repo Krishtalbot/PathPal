@@ -63,14 +63,7 @@ hr{
     color: #6e4c19;
 }
 .graph-img {
-    background-color: #fbf8f4;
     max-width: 100%;
     height: auto;
     max-height: 500px; 
-}
-.optimized-bg{
-    display: flex;
-    flex-direction: column;
-    gap:20px;
-   
 }

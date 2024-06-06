@@ -11,36 +11,33 @@
         <strong>PathPal</strong>
         <div class="text">Discover Your Path: Navigate Through Cities with Ease</div>
     </div>
-    <div class="travel">
-        <strong>🏞️Travel Path</strong>
-        <div class="text">Here is your most efficient route to visit your selected cities!</div>
+   <div class="travel">
+      <strong>🏞️Travel Path</strong>
+      <div class = "text">Here is your most efficient route to visit your selected cities!</div>
         <div class="result">{{ city_path }}</div>
         <hr>
         <strong>🏕️Total Cost</strong>
-        <div class="text">See the overall distance or time required for your journey, helping you plan the most efficient and cost-effective route across your selected cities</div>
+        <div class="text">See the overall distance or time required for your journey, 
+            helping you plan the most efficient and cost-effective route 
+            across your selected cities</div>
         <div class="result">{{ total_cost }}</div>
-    </div>
+   </div>
   
- 
-
     <div class="graph">
         <strong class="heading">Visualization in a graph</strong>
-        <div class="optimized-bg">
-            <strong>Optimized Path Graph with Background</strong>
-            <img src="{{ optimized_img_with_bg }}" alt="Optimized Path Graph with Background" class="graph-img">
-        </div>
-        <hr>
         <div class="container">
             <div class="initial">
                 <strong>Initial Graph</strong>
                 <img src="{{ initial_img }}" alt="Initial Graph" class="graph-img">
             </div>
-            <div class="optimized">
-                <strong>Optimized Path Graph</strong>
-                <img src="{{ optimized_img }}" alt="Optimized Path Graph" class="graph-img">
-            </div>
+           <div class="optimized">
+            <strong>Optimized Path Graph</strong>
+            <img src="{{ optimized_img }}" alt="Optimized Path Graph" class="graph-img">
+           </div>
             
         </div>
+        
     </div>
+   
 </body>
 </html>
