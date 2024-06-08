@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 import csv
@@ -7,6 +10,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from greedy import nearest_neighbor_algorithm
+from dynamic import held_karp, generate_distances
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
@@ -46,6 +50,7 @@ def select_cities():
         return redirect(url_for('index'))
 
     measure = request.form['measure']
+    algorithm = request.form['algorithm']
     
     if measure == 'distance':
         _, distance_data = read_csv('distance_cost.csv')
@@ -55,7 +60,13 @@ def select_cities():
     distance_matrix = generate_distance_matrix(selected_cities, distance_data)
     
     start_city_index = selected_cities.index(start_city)
-    city_path, total_cost = nearest_neighbor_algorithm(distance_matrix, selected_cities, start_city_index)
+    
+    if algorithm == 'greedy':
+        city_path, total_cost = nearest_neighbor_algorithm(distance_matrix, selected_cities, start_city_index)
+    elif algorithm == 'dynamic':
+        dists = generate_distances(selected_cities, distance_data)
+        total_cost, path_indices = held_karp(dists)
+        city_path = [selected_cities[i] for i in path_indices]
 
     if measure == 'distance':
         total_cost_str = f"{total_cost} kilometers"
@@ -107,7 +118,6 @@ def draw_graph(G, title, start_city):
     plt.close()
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     return f"data:image/png;base64,{data}"
-
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -15,29 +15,38 @@
         <div class="container"> 
             <div class="first"> 
                 <strong>🏕️Select Measure</strong>
-            <label>
-                <input type="radio" name="measure" value="distance" required>
-                Optimize by Distance
-            </label>
-            <label>
-                <input type="radio" name="measure" value="time" required>
-                Optimize by Time
-            </label>
-            <strong>🏠Select Start City</strong>
-            <select name="start_city" required>
-                {% for city in cities %}
-                <option value="{{ city }}">{{ city }}</option>
-                {% endfor %}
-            </select></div>
+                <label>
+                    <input type="radio" name="measure" value="distance" required>
+                    Optimize by Distance
+                </label>
+                <label>
+                    <input type="radio" name="measure" value="time" required>
+                    Optimize by Time
+                </label>
+
+                <strong>🏠Select Start City</strong>
+                <select name="start_city" required>
+                    {% for city in cities %}
+                    <option value="{{ city }}">{{ city }}</option>
+                    {% endfor %}
+                </select>
+
+                <strong>🔍Select Algorithm</strong>
+                <select name="algorithm" required>
+                    <option value="greedy">Greedy</option>
+                    <option value="dynamic">Dynamic (Held-Karp)</option>
+                </select>
+            </div>
        
-        <div class="second"> <strong>📌 Select Cities</strong>
-            {% for city in cities %}
-            <label>
-                <input type="checkbox" name="cities" value="{{ city }}">
-                {{ city }}
-            </label>
-            {% endfor %}
-        </div>
+            <div class="second"> 
+                <strong>📌 Select Cities</strong>
+                {% for city in cities %}
+                <label>
+                    <input type="checkbox" name="cities" value="{{ city }}">
+                    {{ city }}
+                </label>
+                {% endfor %}
+            </div>
         </div>
        <button type="submit">Calculate Route</button>
     </form>
