@@ -61,8 +61,19 @@ def select_cities():
     
     start_city_index = selected_cities.index(start_city)
     
+    additional_info = None
+    
     if algorithm == 'greedy':
         city_path, total_cost = nearest_neighbor_algorithm(distance_matrix, selected_cities, start_city_index)
+        dists = generate_distances(selected_cities, distance_data)
+        dynamic_cost, dynamic_path_indices = held_karp(dists)
+        dynamic_city_path = [selected_cities[i] for i in dynamic_path_indices]
+        if measure == 'distance':
+            if dynamic_cost < total_cost:
+                additional_info = f"The dynamic algorithm would cover the route in just {dynamic_cost} kilometers."
+        elif measure == 'time':
+            if dynamic_cost < total_cost:
+                additional_info = f"The dynamic algorithm would complete the journey in {math.floor(dynamic_cost / 60)} hours {(dynamic_cost % 60)} minutes."
     elif algorithm == 'dynamic':
         dists = generate_distances(selected_cities, distance_data)
         total_cost, path_indices = held_karp(dists)
@@ -71,7 +82,7 @@ def select_cities():
     if measure == 'distance':
         total_cost_str = f"{total_cost} kilometers"
     elif measure == 'time':
-        total_cost_str = f"{math.floor(total_cost/60)} hours {(total_cost % 60)} minutes"
+        total_cost_str = f"{math.floor(total_cost / 60)} hours {(total_cost % 60)} minutes"
 
     city_path_str = " ➔ ".join(city_path)
 
@@ -82,7 +93,7 @@ def select_cities():
     optimized_img = draw_graph(optimized_G, "Optimized Path Graph", start_city)
     
     return render_template('results.html', city_path=city_path_str, total_cost=total_cost_str,
-                           initial_img=initial_img, optimized_img=optimized_img)
+                           initial_img=initial_img, optimized_img=optimized_img, additional_info=additional_info)
 
 def create_graph_with_all_edges(cities, distance_matrix):
     G = nx.Graph()
@@ -112,7 +123,7 @@ def draw_graph(G, title, start_city):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8, font_weight="bold")
     
     plt.title(title)
-    plt.tight_layout()  # Adjust the layout of the plot to prevent overlap
+    plt.tight_layout()
     buf = BytesIO()
     plt.savefig(buf, format="png")
     plt.close()

@@ -13,7 +13,7 @@
     </div>
    <div class="travel">
       <strong>🏞️Travel Path</strong>
-      <div class = "text">Here is your most efficient route to visit your selected cities!</div>
+      <div class="text">Here is your most efficient route to visit your selected cities!</div>
         <div class="result">{{ city_path }}</div>
         <hr>
         <strong>🏕️Total Cost</strong>
@@ -21,6 +21,11 @@
             helping you plan the most efficient and cost-effective route 
             across your selected cities</div>
         <div class="result">{{ total_cost }}</div>
+        {% if additional_info %}
+        <hr>
+        <strong>🔍 Additional Information</strong>
+        <div class="additional_info">{{ additional_info }}</div>
+        {% endif %}
    </div>
   
     <div class="graph">
